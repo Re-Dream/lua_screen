@@ -200,9 +200,8 @@ if CLIENT then
 	local cursor = Material("icon16/cursor.png")
 	local grad = Material("vgui/gradient-d")
 	function ENT:DrawTranslucent()
-		if self:WorldToLocal(LocalPlayer():EyePos()).z < 0 then return end
-
 		local pos, ang = self:ScreenCoords()
+		if WorldToLocal(EyePos(), EyeAngles(), pos, ang).z < 0 then return end
 
 		local w, h, s = self.ScreenWidth, self.ScreenHeight, self.ScreenScale
 		cam.Start3D2D(pos, ang, s)
