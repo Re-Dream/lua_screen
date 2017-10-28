@@ -108,10 +108,12 @@ if CLIENT then
 		local logoX = (w + buttW + buttX) * 0.5 - logoW * 0.5
 		local logoY = h * 0.5 - logoH * 0.5
 
-		local logo = WebMaterial("redream_logo_transparent_text_stroke", "https://gmlounge.us/media/redream-logo-transparent-text-stroke.png")
-		surface.SetDrawColor(Color(255, 255, 255, 255))
-		surface.SetMaterial(logo)
-		surface.DrawTexturedRect(logoX, logoY, logoW, logoH)
+		if _G.WebMaterial then
+			local logo = WebMaterial("redream_logo_transparent_text_stroke", "https://gmlounge.us/media/redream-logo-transparent-text-stroke.png")
+			surface.SetDrawColor(Color(255, 255, 255, 255))
+			surface.SetMaterial(logo)
+			surface.DrawTexturedRect(logoX, logoY, logoW, logoH)
+		end
 
 		local padding = 32
 		local _hovering = IsHovering(logoX + padding, logoY + padding, logoW - padding * 2, logoH - padding * 2, mX, mY)
