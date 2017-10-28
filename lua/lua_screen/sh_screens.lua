@@ -17,11 +17,11 @@ function luascreen.RegisterScreen(id, scr)
 	luascreen.Screens[id] = scr
 end
 
-for _, file in next, (file.Find("luascreen/screens/*.lua", "LUA")) do
-	AddCSLuaFile("luascreen/screens/" .. file)
+for _, file in next, (file.Find("lua_screen/screens/*.lua", "LUA")) do
+	AddCSLuaFile("lua_screen/screens/" .. file)
 
 	_G.ENT = {}
-	include("luascreen/screens/" .. file)
+	include("lua_screen/screens/" .. file)
 	if ENT.Identifier then
 		luascreen.RegisterScreen(ENT.Identifier, table.Copy(ENT))
 	else
@@ -41,8 +41,8 @@ if SERVER then
 	end
 
 	function luascreen.PlaceScreens()
-		if file.Exists("luascreen/placement/" .. game.GetMap() .. ".lua", "LUA") then
-			luascreen.Placement = include("luascreen/placement/" .. game.GetMap() .. ".lua")
+		if file.Exists("lua_screen/placement/" .. game.GetMap() .. ".lua", "LUA") then
+			luascreen.Placement = include("lua_screen/placement/" .. game.GetMap() .. ".lua")
 
 			for _, data in next, luascreen.Placement do
 				local screen = luascreen.SpawnScreen(data.id, data.pos, data.ang)
