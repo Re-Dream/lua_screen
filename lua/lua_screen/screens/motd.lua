@@ -76,6 +76,12 @@ if CLIENT then
 				LocalPlayer():ConCommand("mingeban steam")
 			end
 		},
+		{
+			text = "MOTD",
+			func = function()
+				LocalPlayer():ConCommand("mingeban motd")
+			end
+		},
 		{	-- logo button
 			func = function()
 				LocalPlayer():ConCommand("mingeban website")
