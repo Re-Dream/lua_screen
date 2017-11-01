@@ -45,6 +45,7 @@ function ENT:SetScreen(id)
 				net.Start(tag)
 					net.WriteEntity(self)
 					net.WriteString(id)
+					net.WriteFloat (self.ScreenScale)
 				net.Broadcast()
 			end)
 		end
@@ -58,6 +59,7 @@ hook.Add("PlayerInitPostEntity", tag, function(ply)
 		net.Start(tag)
 			net.WriteEntity(screen)
 			net.WriteString(screen.Identifier)
+			net.WriteFloat (screen.ScreenScale)
 		net.Send(ply)
 	end
 end)
@@ -108,6 +110,19 @@ function ENT:IsAccessible(ply)
 	return x and y
 end
 
+function ENT:SetScale(scale)
+	self.ScreenScale = scale
+	if SERVER then
+		timer.Simple(1, function() -- give the client time to know the entity came up
+			net.Start(tag)
+				net.WriteEntity(self)
+				net.WriteString(self.Identifier)
+				net.WriteFloat (self.ScreenScale)
+			net.Broadcast()
+		end)
+	end
+end
+
 if SERVER then
 	util.AddNetworkString(tag)
 
@@ -138,8 +153,10 @@ if CLIENT then
 	net.Receive(tag, function()
 		local screen = net.ReadEntity()
 		local id = net.ReadString()
+		local scale = net.ReadFloat()
 
 		screen:SetScreen(id)
+		screen:SetScale(scale)
 	end)
 
 	function ENT:Send(...)

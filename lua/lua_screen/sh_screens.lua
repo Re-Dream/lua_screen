@@ -31,21 +31,28 @@ for _, file in next, (file.Find("lua_screen/screens/*.lua", "LUA")) do
 end
 
 if SERVER then
-	function luascreen.SpawnScreen(id, pos, ang)
+	function luascreen.SpawnScreen(id, pos, ang, scale)
 		local screen = ents.Create(tag)
-		if id  then screen:SetScreen(id)  end
-		if pos then	screen:SetPos(pos)    end
-		if ang then screen:SetAngles(ang) end
+		if id    then screen:SetScreen(id)  end
+		if pos   then screen:SetPos(pos)    end
+		if ang   then screen:SetAngles(ang) end
+		if scale then screen:SetScale(scale)end
 		screen:Spawn()
 		return screen
 	end
 
 	function luascreen.PlaceScreens()
-		if file.Exists("lua_screen/placement/" .. game.GetMap() .. ".lua", "LUA") then
-			luascreen.Placement = include("lua_screen/placement/" .. game.GetMap() .. ".lua")
+		local exists = ""
+		for _, filename in next, (file.Find("lua_screen/placement/*.lua", "LUA") do
+			if game.GetMap():match(filename:StripExtension()) and #exists <= #filename then
+				exists = filename
+			end
+		end
+		if exists:Trim() ~= "" then
+			luascreen.Placement = include("lua_screen/placement/" .. exists)
 
 			for _, data in next, luascreen.Placement do
-				local screen = luascreen.SpawnScreen(data.id, data.pos, data.ang)
+				local screen = luascreen.SpawnScreen(data.id, data.pos, data.ang, data.scale)
 				screen:Grip(false)
 			end
 		end
