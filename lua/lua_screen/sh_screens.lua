@@ -43,7 +43,7 @@ if SERVER then
 
 	function luascreen.PlaceScreens()
 		local exists = ""
-		for _, filename in next, (file.Find("lua_screen/placement/*.lua", "LUA") do
+		for _, filename in next, (file.Find("lua_screen/placement/*.lua", "LUA")) do
 			if game.GetMap():match(filename:StripExtension()) and #exists <= #filename then
 				exists = filename
 			end
