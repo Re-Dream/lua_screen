@@ -147,6 +147,10 @@ if SERVER then
 
 		screen:Receive(ply, args)
 	end)
+
+	function ENT:Think()
+		self:DrawShadow(not self.PhysgunDisabled)
+	end
 end
 
 if CLIENT then
