@@ -30,6 +30,8 @@ function ENT:Initialize()
 		gpo:Wake()
 		gpo:EnableMotion(false)
 	end
+
+	self.Initialized = true
 end
 
 function ENT:CanConstruct() return false end
@@ -113,13 +115,11 @@ end
 function ENT:SetScale(scale)
 	self.ScreenScale = scale
 	if SERVER then
-		timer.Simple(1, function() -- give the client time to know the entity came up
-			net.Start(tag)
-				net.WriteEntity(self)
-				net.WriteString(self.Identifier)
-				net.WriteFloat (self.ScreenScale)
-			net.Broadcast()
-		end)
+		net.Start(tag)
+			net.WriteEntity(self)
+			net.WriteString(self.Identifier)
+			net.WriteFloat (self.ScreenScale)
+		net.Broadcast()
 	end
 end
 
@@ -149,6 +149,13 @@ if SERVER then
 	end)
 
 	function ENT:Think()
+		if self.Initialized then
+			self.Ready = true
+		end
+		if self.Ready and not self.ReadyExecuted and self.OnReady then
+			self:OnReady()
+			self.ReadyExecuted = true
+		end
 		self:DrawShadow(not self.PhysgunDisabled)
 	end
 end
@@ -159,8 +166,10 @@ if CLIENT then
 		local id = net.ReadString()
 		local scale = net.ReadFloat()
 
-		screen:SetScreen(id)
-		screen:SetScale(scale)
+		function screen:OnReady()
+			self:SetScreen(id)
+			self:SetScale(scale)
+		end
 	end)
 
 	function ENT:Send(...)
@@ -186,6 +195,14 @@ if CLIENT then
 	end
 
 	function ENT:Think()
+		if self.Initialized then
+			self.Ready = true
+		end
+		if self.Ready and not self.ReadyExecuted and self.OnReady then
+			self:OnReady()
+			self.ReadyExecuted = true
+		end
+
 		self:SetDrawBounds()
 
 		local x, y = self:CursorPos()

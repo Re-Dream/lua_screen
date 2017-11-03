@@ -97,6 +97,7 @@ if CLIENT then
 		local buttY = h * 0.925
 		local buttW, buttH = 256, 48
 		local mX, mY = self:CursorPos()
+		local usePos = self.UsePos
 		local hovering = false
 
 		-- background
@@ -128,7 +129,7 @@ if CLIENT then
 		if _hovering and not self.Using then
 			a = 30
 		elseif _hovering and self.Using then
-			self.Choice = #buttons
+			self.Choice = #buttons -- logo callback
 			a = 45
 		end
 		surface.SetDrawColor(Color(255, 255, 255, a))
@@ -141,11 +142,14 @@ if CLIENT then
 				local _x = buttX
 				local _y = buttY - buttH
 				local _hovering = IsHovering(_x, _y, buttW, buttH, mX, mY)
+				local clickedIt = usePos and IsHovering(_x, _y, buttW, buttH, usePos.x, usePos.y)
 				local a = 194
 				if _hovering and not self.Using then
 					a = 218
 				elseif _hovering and self.Using then
-					self.Choice = k
+					if clickedIt then
+						self.Choice = k
+					end
 					a = 230
 				end
 				surface.SetDrawColor(Color(0, 46, 92, a))
@@ -201,18 +205,21 @@ if CLIENT then
 	end
 
 	function ENT:OnMousePressed()
-		self._Using = true
+		if not self:IsAccessible() then return end
+		local x, y = self:CursorPos()
+		self.UsePos = { x = x, y = y }
 	end
 
 	local nextUse = 0
 	function ENT:OnMouseReleased()
 		if not self:IsAccessible() then return end
-		if self.Hovering and self._Using and self.Choice and nextUse < RealTime() then
+		if self.Hovering and self.UsePos and self.Choice and nextUse < RealTime() then
 			buttons[self.Choice].func()
+			self.Choice = nil
 			EmitSound("garrysmod/ui_click.wav", LocalPlayer():GetEyeTrace().HitPos, LocalPlayer():EntIndex())
 			nextUse = RealTime() + 1
 		end
-		self._Using = false
+		self.UsePos = nil
 	end
 end
 
