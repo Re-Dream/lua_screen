@@ -30,6 +30,16 @@ for _, file in next, (file.Find("lua_screen/screens/*.lua", "LUA")) do
 	ENT = nil
 end
 
+function luascreen.GetScreens(id)
+	local tbl = {}
+	for _, ent in next, ents.FindByClass("lua_screen") do
+		if not id or ent.Identifier == id then
+			tbl[#tbl + 1] = ent
+		end
+	end
+	return tbl
+end
+
 if SERVER then
 	function luascreen.SpawnScreen(id, pos, ang, scale)
 		local screen = ents.Create(tag)
@@ -42,6 +52,12 @@ if SERVER then
 	end
 
 	function luascreen.PlaceScreens()
+		for _, screen in next, luascreen.GetScreens() do
+			if screen.MapPlaced then
+				screen:Remove()
+			end
+		end
+
 		local exists = ""
 		for _, filename in next, (file.Find("lua_screen/placement/*.lua", "LUA")) do
 			if game.GetMap():match(filename:StripExtension()) and #exists <= #filename then
@@ -53,21 +69,12 @@ if SERVER then
 
 			for _, data in next, luascreen.Placement do
 				local screen = luascreen.SpawnScreen(data.id, data.pos, data.ang, data.scale)
+				screen.MapPlaced = true
 				screen:Grip(false)
 			end
 		end
 	end
 	hook.Add("InitPostEntity", tag, luascreen.PlaceScreens)
 	hook.Add("PostCleanupMap", tag, luascreen.PlaceScreens)
-end
-
-function luascreen.GetScreens(id)
-	local tbl = {}
-	for _, ent in next, ents.FindByClass("lua_screen") do
-		if not id or ent.Identifier == id then
-			tbl[#tbl + 1] = ent
-		end
-	end
-	return tbl
 end
 
