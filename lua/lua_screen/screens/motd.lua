@@ -124,12 +124,15 @@ if CLIENT then
 
 		local padding = 32
 		local _hovering = IsHovering(logoX + padding, logoY + padding, logoW - padding * 2, logoH - padding * 2, mX, mY)
+		local clickedIt = usePos and IsHovering(logoX + padding, logoY + padding, logoW - padding * 2, logoH - padding * 2, usePos.x, usePos.y)
 		hovering = hovering and hovering or _hovering
 		local a = 0
 		if _hovering and not self.Using then
 			a = 30
 		elseif _hovering and self.Using then
-			self.Choice = #buttons -- logo callback
+			if clickedIt then
+				self.Choice = #buttons -- logo callback
+			end
 			a = 45
 		end
 		surface.SetDrawColor(Color(255, 255, 255, a))
