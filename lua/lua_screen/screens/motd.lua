@@ -7,12 +7,6 @@ ENT.ScreenHeight = 645
 ENT.ScreenScale = 0.15
 ENT.MaxRange = 192
 
-if SERVER then
-	function ENT:Receive()
-
-	end
-end
-
 if CLIENT then
 	surface.CreateFont("lua_screen_motd_header", {
 		font = "Roboto Cn",
@@ -34,7 +28,7 @@ if CLIENT then
 		size = 24,
 		weight = 500,
 	})
-	local grad = Material("vgui/gradient-d")
+	local grad  = Material("vgui/gradient-d")
 	local clock = Material("icon16/clock.png")
 	local function DrawOutlinedRect(x, y, w, h, thicc)
 		for i = 0, thicc - 1 do

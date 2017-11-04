@@ -141,6 +141,7 @@ if SERVER then
 		self.PhysgunDisabled = not b
 	end
 
+	function ENT:Receive(ply, args) end
 	net.Receive(tag, function(_, ply)
 		local screen = net.ReadEntity()
 		local args = net.ReadTable()
@@ -163,8 +164,8 @@ end
 if CLIENT then
 	net.Receive(tag, function()
 		local screen = net.ReadEntity()
-		local id = net.ReadString()
-		local scale = net.ReadFloat()
+		local id     = net.ReadString()
+		local scale  = net.ReadFloat ()
 
 		function screen:OnReady()
 			self:SetScreen(id)
@@ -175,7 +176,7 @@ if CLIENT then
 	function ENT:Send(...)
 		net.Start(tag)
 			net.WriteEntity(self)
-			net.WriteTable({...})
+			net.WriteTable ({...})
 		net.SendToServer()
 	end
 

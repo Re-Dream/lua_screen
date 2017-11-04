@@ -43,10 +43,10 @@ end
 if SERVER then
 	function luascreen.SpawnScreen(id, pos, ang, scale)
 		local screen = ents.Create(tag)
-		if id    then screen:SetScreen(id)  end
-		if pos   then screen:SetPos(pos)    end
-		if ang   then screen:SetAngles(ang) end
-		if scale then screen:SetScale(scale)end
+		if id    then screen:SetScreen(id)   end
+		if pos   then screen:SetPos(pos)     end
+		if ang   then screen:SetAngles(ang)  end
+		if scale then screen:SetScale(scale) end
 		screen:Spawn()
 		return screen
 	end
