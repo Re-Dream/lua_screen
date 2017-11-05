@@ -47,7 +47,7 @@ function ENT:SetScreen(id)
 				net.Start(tag)
 					net.WriteEntity(self)
 					net.WriteString(id)
-					net.WriteFloat (self.ScreenScale)
+					net.WriteFloat (self.ScreenScale or 0.2) -- ??
 				net.Broadcast()
 			end)
 		end
