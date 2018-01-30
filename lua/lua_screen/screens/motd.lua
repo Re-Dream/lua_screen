@@ -110,7 +110,7 @@ if CLIENT then
 		local logoY = h * 0.5 - logoH * 0.5
 
 		if _G.WebMaterial then
-			local logo = WebMaterial("redream_logo_transparent_text_stroke", "https://gmlounge.us/media/redream-logo-transparent-text-stroke.png")
+			local logo = WebMaterial("redream_logo_transparent_text_stroke", "https://re-dream.org/media/redream-logo-transparent-text-stroke.png")
 			surface.SetDrawColor(Color(255, 255, 255, 255))
 			surface.SetMaterial(logo)
 			surface.DrawTexturedRect(logoX, logoY, logoW, logoH)
